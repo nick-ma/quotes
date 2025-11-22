@@ -1,0 +1,58 @@
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*#
+.*.swp
+.*.swo
+.vim/
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.cache
+/tmp/
+*.bak
+*.backup
+
+# Script Temporary Files
+*.tmp.*
+.tmp.*
+mktemp*
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any Python scripts are added later)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Local environment files
+.env
+.env.local
+
+# Output directories (optional - uncomment if you don't want to track scraped data)
+# quotes/csv/
+# quotes/json/
+
