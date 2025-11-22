@@ -8,7 +8,9 @@ A project for scraping quotes from Goodreads and exporting them in both CSV and 
 
 ```
 quotes/
-├── fetch_goodreads_quotes.sh    # 抓取脚本 / Scraping script
+├── fetch_goodreads_quotes.sh    # 单个标签抓取脚本 / Single tag scraping script
+├── fetch_all_tags.sh             # 批量抓取脚本 / Batch fetching script
+├── tags.md                       # 标签列表文件 / Tags list file
 ├── quotes/
 │   ├── csv/                      # CSV 格式引用 / Quotes in CSV format
 │   │   ├── inspirational.csv
@@ -30,6 +32,8 @@ quotes/
 - 导出为 CSV 和 JSON 两种格式 / Export to both CSV and JSON formats
 - 随机延迟请求，避免被封禁 / Random delay between requests to avoid being blocked
 - 自动清理和格式化数据 / Automatic data cleaning and formatting
+- 批量处理多个标签 / Batch processing multiple tags
+- 智能跳过已抓取的标签 / Smart skip for already fetched tags
 
 ## 依赖要求 / Requirements
 
@@ -54,7 +58,7 @@ sudo apt-get install curl jq
 
 ## 使用方法 / Usage
 
-### 基本用法 / Basic Usage
+### 单个标签抓取 / Single Tag Fetching
 
 ```bash
 ./fetch_goodreads_quotes.sh -t inspirational -m 5
@@ -84,6 +88,41 @@ sudo apt-get install curl jq
 # Increase request delay to avoid being blocked
 ./fetch_goodreads_quotes.sh -t romance -m 20 -d 100
 ```
+
+### 批量抓取所有标签 / Batch Fetching All Tags
+
+`fetch_all_tags.sh` 脚本可以从 `tags.md` 读取所有标签并批量抓取：
+
+The `fetch_all_tags.sh` script can read all tags from `tags.md` and fetch them in batch:
+
+```bash
+# 抓取所有标签，自动跳过已存在的
+# Fetch all tags, automatically skip existing ones
+./fetch_all_tags.sh
+
+# 强制重新抓取所有标签（即使已存在）
+# Force re-fetch all tags (even if they exist)
+./fetch_all_tags.sh --force
+
+# 自定义抓取参数
+# Custom fetch parameters
+./fetch_all_tags.sh -m 10 -d 50
+```
+
+#### 批量脚本选项 / Batch Script Options
+
+- `-f, --force` - 强制重新抓取，即使文件已存在 / Force re-fetch even if files exist
+- `-t, --tags-file <file>` - 指定标签文件 (默认: tags.md) / Specify tags file (default: tags.md)
+- `-m, --max-page <number>` - 每个标签的最大页数 (默认: 5) / Max pages per tag (default: 5)
+- `-d, --max-delay-ms <num>` - 请求之间的最大随机延迟，单位毫秒 (默认: 10) / Max random delay between requests in ms (default: 10)
+- `-D, --output-dir <dir>` - 输出目录 (默认: quotes) / Output directory (default: quotes)
+- `-h, --help` - 显示帮助信息 / Show help message
+
+#### 跳过逻辑 / Skip Logic
+
+脚本会检查 `quotes/csv/${tag}.csv` 和 `quotes/json/${tag}.json` 是否同时存在。如果两个文件都存在且没有使用 `--force` 参数，则跳过该标签。
+
+The script checks if both `quotes/csv/${tag}.csv` and `quotes/json/${tag}.json` exist. If both files exist and `--force` is not used, the tag will be skipped.
 
 ## 输出格式 / Output Formats
 
